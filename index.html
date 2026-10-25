@@ -6,7 +6,7 @@
 <title>Black Rainbow Cycling Crew · Maillot 2027</title>
 <meta name="description" content="Black Rainbow Cycling Crew : la révélation du maillot 2027.">
 <meta property="og:title" content="Black Rainbow Cycling Crew · Maillot 2027">
-<meta property="og:description" content="Ouverture des cales dimanche 25 octobre, 19h.">
+<meta property="og:description" content="Le nouveau maillot de l’équipage se dévoile bientôt.">
 <meta property="og:image" content="soute.webp">
 <meta name="theme-color" content="#07060d">
 <style>*,*::before,*::after{box-sizing:border-box}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -241,11 +241,12 @@ button{font-family:var(--f-ui);cursor:pointer}
     <div class="kana neon-c">ブラック・レインボー</div>
   </div>
   <div id="clock">
+    <div class="unit" id="u-d" hidden><b id="cd-d">--</b><span><i>日</i>jours</span></div>
     <div class="unit"><b id="cd-h">--</b><span><i>時</i>heures</span></div>
     <div class="unit"><b id="cd-m">--</b><span><i>分</i>minutes</span></div>
     <div class="unit"><b id="cd-s">--</b><span><i>秒</i>secondes</span></div>
   </div>
-  <div class="when">Ouverture des cales dimanche 25 octobre, 19h</div>
+  <div class="when" id="when">Ouverture des cales prochainement</div>
   <button id="enter" class="cut" disabled><i>乗船</i><span id="enter-label">Monter à bord</span></button>
 </section>
 
@@ -342,8 +343,9 @@ button{font-family:var(--f-ui);cursor:pointer}
 <script>
 (() => {
 /* ======== RÉGLAGES ======== */
-// Dimanche 25/10/2026 19h heure de Paris (passage à l'heure d'hiver la nuit même : UTC+1)
-const REVEAL_AT = Date.UTC(2026, 9, 25, 18, 0, 0);
+// Date et heure de la révélation, heure de Paris (hiver = +01:00). Seule ligne à changer pour décaler.
+const REVEAL = "2026-10-25T19:00:00+01:00";
+const REVEAL_AT = Date.parse(REVEAL);
 const INTRO_VIDEO = "";          // chemin de la vraie vidéo (ex. "intro.mp4")
 const INTRO_MS = 9000;
 const PREVIEW = location.hash === "#apercu";
@@ -369,13 +371,22 @@ $("total").textContent = Object.keys(EGGS).length;
 const pad = n => String(n).padStart(2,"0");
 function tick(){
   const left = Math.max(0, REVEAL_AT - Date.now());
-  $("cd-h").textContent = pad(Math.floor(left/3.6e6));
+  const d = Math.floor(left/8.64e7);
+  $("u-d").hidden = d < 1;
+  $("cd-d").textContent = pad(d);
+  $("cd-h").textContent = pad(Math.floor(left/3.6e6) - (d >= 1 ? d*24 : 0));
   $("cd-m").textContent = pad(Math.floor(left/6e4)%60);
   $("cd-s").textContent = pad(Math.floor(left/1e3)%60);
   const open = left === 0 || PREVIEW;
   $("enter").disabled = !open;
   $("enter-label").textContent = open ? "Monter à bord" : "Cales verrouillées";
 }
+(() => {
+  const f = new Intl.DateTimeFormat("fr-FR", { weekday:"long", day:"numeric", month:"long", hour:"numeric", minute:"2-digit", timeZone:"Europe/Paris" });
+  const parts = Object.fromEntries(f.formatToParts(new Date(REVEAL_AT)).map(p => [p.type, p.value]));
+  const h = parts.hour + "h" + (parts.minute === "00" ? "" : parts.minute);
+  $("when").textContent = `Ouverture des cales ${parts.weekday} ${parts.day} ${parts.month}, ${h}`;
+})();
 tick(); const clockTimer = setInterval(tick, 1000);
 const DIRECT = location.hash === "#soute" || location.hash === "#maillot";
 if (PREVIEW || DIRECT){ const f=document.createElement("div"); f.id="preview-flag"; f.textContent="Aperçu"; document.body.appendChild(f); }
