@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Black Rainbow Cycling Crew · Maillot 2027</title>
+<meta name="description" content="Black Rainbow Cycling Crew : la révélation du maillot 2027.">
+<meta property="og:title" content="Black Rainbow Cycling Crew · Maillot 2027">
+<meta property="og:description" content="Ouverture des cales dimanche 25 octobre, 19h.">
+<meta property="og:image" content="soute.webp">
+<meta name="theme-color" content="#07060d">
+<style>*,*::before,*::after{box-sizing:border-box}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bangers&family=Chakra+Petch:wght@400;500;600;700&family=Dela+Gothic+One&display=swap">
+<style>
+/* Layout : scène plein écran — compte à rebours > intro drone > soute panoramique 16:9 (glissable sur mobile) > révélation 3D.
+   Direction : galion pirate amarré dans une mégapole néon. Bois noir, tubes néon cyan/magenta, enseignes japonaises. */
+:root{
+  --void:#07060d;
+  --hull:#120e1f;
+  --plank:#1c1630;
+  --violet:#7b2cff;
+  --lav:#c4a8ff;
+  --cyan:#2bf0a8;
+  --magenta:#ff2bd6;
+  --gold:#ffcf4a;
+  --text:#ece6ff;
+  --f-crew:"Bangers","Impact",system-ui,sans-serif;
+  --f-jp:"Dela Gothic One","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif;
+  --f-ui:"Chakra Petch","Arial Narrow",system-ui,sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--void);color:var(--text);font-family:var(--f-ui);font-size:17px;overflow:hidden;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));}
+/* lignes de balayage CRT */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px);mix-blend-mode:multiply}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));}
+button{font-family:var(--f-ui);cursor:pointer}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+
+/* ---------- Glitch typographique (esprit logos BR) ---------- */
+.glitch{position:relative;display:inline-block;color:var(--lav);text-shadow:-.05em 0 var(--cyan),.05em 0 var(--violet)}
+.glitch::before,.glitch::after{content:attr(data-text);position:absolute;inset:0;pointer-events:none}
+.glitch::before{color:var(--cyan);mix-blend-mode:screen;clip-path:inset(18% 0 62% 0);transform:translateX(-.06em);animation:slice 3.2s infinite steps(1)}
+.glitch::after{color:var(--magenta);mix-blend-mode:screen;clip-path:inset(64% 0 14% 0);transform:translateX(.06em);animation:slice 2.7s infinite reverse steps(1)}
+@keyframes slice{
+  0%{clip-path:inset(18% 0 62% 0);transform:translateX(-.06em)}
+  12%{clip-path:inset(48% 0 30% 0);transform:translateX(.09em)}
+  24%{clip-path:inset(4% 0 84% 0);transform:translateX(-.03em)}
+  36%{clip-path:inset(70% 0 8% 0);transform:translateX(.05em)}
+  48%,100%{clip-path:inset(100% 0 0 0);transform:none}
+}
+.neon-c{color:#eafff5;text-shadow:0 0 4px var(--cyan),0 0 14px var(--cyan),0 0 32px rgba(43,240,168,.6)}
+.neon-m{color:#ffe9fb;text-shadow:0 0 4px var(--magenta),0 0 14px var(--magenta),0 0 32px rgba(255,43,214,.6)}
+.jp{font-family:var(--f-jp);font-weight:400}
+
+/* ---------- Compte à rebours ---------- */
+#gate{z-index:40;text-align:center;gap:22px;overflow:hidden;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 100%,rgba(123,44,255,.45),transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 0%,rgba(255,43,214,.18),transparent 70%),
+    var(--void)}
+#gate::before{content:"";position:absolute;left:-50%;right:-50%;bottom:-10%;height:45%;
+  background:
+    repeating-linear-gradient(90deg,rgba(43,240,168,.45) 0 1px,transparent 1px 64px),
+    repeating-linear-gradient(0deg,rgba(43,240,168,.45) 0 1px,transparent 1px 44px);
+  transform:perspective(320px) rotateX(62deg);transform-origin:50% 0;
+  mask-image:linear-gradient(transparent,#000 40%);-webkit-mask-image:linear-gradient(transparent,#000 40%);
+  animation:gridrun 2.4s linear infinite}
+@keyframes gridrun{to{background-position:0 0,0 44px}}
+#gate > *{position:relative}
+.vert{position:absolute;top:50%;transform:translateY(-50%);writing-mode:vertical-rl;font-family:var(--f-jp);font-size:clamp(18px,3vw,30px);letter-spacing:.2em;opacity:.85}
+.vert.l{left:max(16px,env(safe-area-inset-left,0px))}
+.vert.r{right:max(16px,env(safe-area-inset-right,0px))}
+@media (max-width:640px){.vert{display:none}}
+.crew-mark{display:flex;flex-direction:column;align-items:center;gap:4px}
+.crew-mark .big{font-family:var(--f-crew);font-size:clamp(54px,14vw,150px);line-height:.85;letter-spacing:.02em;transform:skewX(-8deg)}
+.crew-mark .sub{font-family:var(--f-crew);font-size:clamp(22px,5vw,40px);letter-spacing:.08em;color:#fff;
+  -webkit-text-stroke:1px #000;text-shadow:-2px 0 var(--cyan),2px 0 var(--magenta),0 3px 0 #000;transform:skewX(-8deg)}
+.kana{font-family:var(--f-jp);font-size:clamp(14px,3vw,20px);letter-spacing:.35em}
+.kicker{font-size:14px;letter-spacing:.32em;text-transform:uppercase;font-weight:600;color:var(--cyan)}
+#clock{display:flex;gap:clamp(8px,3vw,26px);justify-content:center}
+.unit{display:flex;flex-direction:column;align-items:center;min-width:78px;padding:10px 8px 8px;
+  background:linear-gradient(180deg,rgba(123,44,255,.18),rgba(7,6,13,.6));border:1px solid rgba(43,240,168,.35);
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+.unit b{font-size:clamp(40px,11vw,78px);font-weight:700;font-variant-numeric:tabular-nums;line-height:1;color:#fff;text-shadow:0 0 12px rgba(43,240,168,.7)}
+.unit span{font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.75;display:flex;gap:6px;align-items:baseline}
+.unit span i{font-style:normal;font-family:var(--f-jp);color:var(--magenta);font-size:15px;letter-spacing:0}
+.when{font-size:17px;letter-spacing:.06em;opacity:.85}
+.cut{clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)}
+#enter{background:var(--magenta);color:#0b0614;border:0;padding:16px 30px;font-size:19px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  display:flex;gap:12px;align-items:center;filter:drop-shadow(0 0 18px rgba(255,43,214,.7))}
+#enter i{font-style:normal;font-family:var(--f-jp);font-size:17px;letter-spacing:0}
+#enter:disabled{background:rgba(255,255,255,.06);color:var(--lav);filter:none;cursor:not-allowed;box-shadow:inset 0 0 0 1px rgba(196,168,255,.4)}
+#preview-flag{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));z-index:90;font-size:12px;letter-spacing:.16em;text-transform:uppercase;background:var(--magenta);color:#0b0614;font-weight:700;padding:4px 8px}
+
+/* ---------- Intro ---------- */
+#intro{z-index:30;background:#000;padding:0}
+#intro canvas,#intro video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#intro .fade{position:absolute;inset:0;background:var(--void);opacity:0;pointer-events:none;transition:opacity .9s}
+
+/* ---------- Soute ---------- */
+#cabin{z-index:10;padding:0;justify-content:flex-start;align-items:flex-start}
+#viewport{position:absolute;inset:0;overflow:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;cursor:grab}
+#viewport::-webkit-scrollbar{display:none}
+#stage{position:relative;overflow:hidden;
+  background:
+   radial-gradient(ellipse 30% 40% at 44% 70%,rgba(255,43,214,.18),transparent 70%),
+   radial-gradient(ellipse 18% 26% at 50% 20%,rgba(43,240,168,.16),transparent 70%),
+   linear-gradient(180deg,rgba(0,0,0,.6) 0%,transparent 24%,transparent 68%,rgba(0,0,0,.7) 100%),
+   repeating-linear-gradient(90deg,var(--plank) 0 7.6%,#0c0915 7.6% 7.85%,#221a3a 7.85% 15.5%,#0c0915 15.5% 15.75%);
+}
+.floor{position:absolute;left:-20%;right:-20%;top:78%;height:40%;
+  background:
+    linear-gradient(180deg,rgba(123,44,255,.25),transparent 80%),
+    repeating-linear-gradient(90deg,rgba(43,240,168,.4) 0 .12em,transparent .12em 5em),
+    repeating-linear-gradient(0deg,rgba(43,240,168,.3) 0 .12em,transparent .12em 3em),
+    #0a0714;
+  transform:perspective(30em) rotateX(55deg);transform-origin:50% 0;box-shadow:inset 0 2em 3em rgba(0,0,0,.8)}
+.beam{position:absolute;top:0;height:6%;left:0;right:0;background:linear-gradient(#08060f,#1a1330);box-shadow:0 .6em 1.5em rgba(0,0,0,.8)}
+.tube{position:absolute;height:.32em;border-radius:.2em;animation:flicker 7s infinite}
+.tube.c{background:#d0ffe9;box-shadow:0 0 .4em var(--cyan),0 0 1.2em var(--cyan),0 0 3em rgba(43,240,168,.55)}
+.tube.m{background:#ffd6f6;box-shadow:0 0 .4em var(--magenta),0 0 1.2em var(--magenta),0 0 3em rgba(255,43,214,.55);animation-delay:2.3s}
+@keyframes flicker{0%,93%,97%,100%{opacity:1}94%,96%{opacity:.35}}
+.porthole{position:absolute;left:45.5%;top:8%;width:9%;aspect-ratio:1;border-radius:50%;overflow:hidden;
+  border:.55em solid #2a2140;box-shadow:0 0 0 .25em #0c0915,0 0 0 .4em var(--cyan),0 0 2.5em rgba(43,240,168,.55),inset 0 0 1.5em rgba(0,0,0,.8)}
+.porthole svg{width:100%;height:100%;display:block}
+.sign{position:absolute;writing-mode:vertical-rl;font-family:var(--f-jp);line-height:1;padding:.45em .3em;letter-spacing:.08em;border-radius:.25em;animation:flicker 9s infinite}
+.sign.m{color:#ffe9fb;border:.15em solid var(--magenta);text-shadow:0 0 .2em var(--magenta),0 0 .6em var(--magenta);box-shadow:0 0 .8em var(--magenta),inset 0 0 .8em rgba(255,43,214,.5)}
+.sign.c{color:#eafff5;border:.15em solid var(--cyan);text-shadow:0 0 .2em var(--cyan),0 0 .6em var(--cyan);box-shadow:0 0 .8em var(--cyan),inset 0 0 .8em rgba(43,240,168,.5);animation-delay:4s}
+.lantern{position:absolute;left:31%;top:5%;width:4.5%;filter:drop-shadow(0 0 1.4em rgba(255,60,90,.65))}
+.lantern.b{left:64.5%;top:5%}
+.egg{position:absolute;background:none;border:0;padding:0;filter:drop-shadow(0 .5em .6em rgba(0,0,0,.7));transition:transform .25s,filter .25s}
+.egg svg{width:100%;height:auto;display:block;overflow:visible}
+.egg:hover,.egg:focus-visible{transform:translateY(-3px) scale(1.03);filter:drop-shadow(0 0 .6em var(--cyan)) drop-shadow(0 0 1.6em rgba(43,240,168,.5))}
+.egg .tag{position:absolute;left:50%;bottom:100%;transform:translate(-50%,-.3em);font-family:var(--f-jp);font-size:1.05em;white-space:nowrap;color:var(--magenta);text-shadow:0 0 .4em var(--magenta);opacity:0;transition:opacity .3s}
+.egg:hover .tag,.egg:focus-visible .tag,.egg.found .tag{opacity:.9}
+.egg::after{content:"";position:absolute;width:.9em;height:.9em;right:6%;top:4%;border-radius:50%;background:var(--cyan);box-shadow:0 0 .8em var(--cyan);opacity:0;animation:glint 4.5s infinite;animation-delay:var(--d,0s)}
+.egg.found::after{display:none}
+@keyframes glint{0%,86%,100%{opacity:0;transform:scale(.3)}90%{opacity:1;transform:scale(1)}}
+#chest{animation:chestglow 2.4s ease-in-out infinite}
+@keyframes chestglow{50%{filter:drop-shadow(0 0 1em var(--magenta)) drop-shadow(0 0 2.4em rgba(255,207,74,.6))}}
+#chest .lid{transform-box:fill-box;transform-origin:0% 100%;transition:transform .9s cubic-bezier(.3,1.4,.5,1)}
+#chest.open .lid{transform:translateY(-6px) rotate(-16deg)}
+
+.bgvid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.egg.hot{border-radius:.6em;background:transparent;filter:none}
+.egg.hot:hover,.egg.hot:focus-visible{transform:none;filter:none;background:rgba(43,240,168,.08);box-shadow:0 0 0 .12em rgba(43,240,168,.7),0 0 1.4em rgba(43,240,168,.45)}
+#chest.hot{animation:none}
+.hud{position:fixed;z-index:12;display:flex;gap:10px;align-items:center;pointer-events:none}
+#counter{top:calc(12px + env(safe-area-inset-top,0px));left:max(16px,env(safe-area-inset-left,0px));background:rgba(7,6,13,.78);padding:7px 14px;font-size:14px;letter-spacing:.14em;text-transform:uppercase;border:1px solid rgba(43,240,168,.45);box-shadow:0 0 14px rgba(43,240,168,.25)}
+#counter i{font-style:normal;font-family:var(--f-jp);color:var(--magenta);letter-spacing:0;font-size:16px}
+#counter b{font-variant-numeric:tabular-nums;color:var(--cyan)}
+#hint{bottom:calc(18px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:rgba(7,6,13,.85);padding:8px 14px;font-size:14px;letter-spacing:.12em;text-transform:uppercase;transition:opacity .6s;white-space:nowrap;border:1px solid rgba(255,43,214,.5)}
+#hint i{font-style:normal;font-family:var(--f-jp);color:var(--magenta);margin-right:8px;letter-spacing:0}
+
+/* ---------- Souvenir ---------- */
+#memory{z-index:50;background:rgba(5,3,10,.78);backdrop-filter:blur(4px)}
+.card{position:relative;max-width:480px;width:100%;color:var(--text);padding:30px 26px 24px;max-height:80vh;overflow:auto;
+  background:linear-gradient(160deg,rgba(123,44,255,.22),rgba(12,9,21,.96) 45%),#0c0915;
+  clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px);
+  box-shadow:inset 0 0 0 1px rgba(43,240,168,.55)}
+.card::before{content:attr(data-kanji);position:absolute;right:10px;bottom:-10px;font-family:var(--f-jp);font-size:120px;line-height:1;color:rgba(255,43,214,.09);pointer-events:none;writing-mode:vertical-rl}
+.card .k{font-size:13px;letter-spacing:.26em;text-transform:uppercase;color:var(--magenta);font-weight:700}
+.card h2{font-family:var(--f-crew);font-weight:400;font-size:46px;margin:6px 0 12px;line-height:.95;letter-spacing:.02em;color:var(--lav);text-shadow:-2px 0 var(--cyan),2px 0 var(--violet);transform:skewX(-6deg);transform-origin:left}
+.card p{margin:0 0 10px;line-height:1.45;font-size:17px;position:relative}
+.card ul{margin:0 0 10px;padding-left:18px;line-height:1.5;font-size:16px;position:relative}
+.card li::marker{color:var(--cyan)}
+.card .todo{position:relative;font-size:14px;background:rgba(43,240,168,.07);border-left:2px solid var(--cyan);padding:7px 10px;margin-top:12px;color:#c2f5df}
+.close{position:absolute;top:8px;right:10px;background:none;border:0;font-size:28px;color:var(--cyan);line-height:1;padding:4px 8px;z-index:1}
+
+/* ---------- Révélation ---------- */
+#flash{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:0;
+  background:radial-gradient(circle at 44% 78%,#fff 0,var(--magenta) 22%,rgba(123,44,255,.6) 45%,rgba(7,6,13,0) 75%)}
+#reveal{z-index:55;flex-direction:row;gap:24px;opacity:0;transition:opacity 1.2s;
+  background:
+    radial-gradient(ellipse 50% 60% at 72% 50%,rgba(123,44,255,.35),transparent 65%),
+    radial-gradient(ellipse 30% 30% at 72% 85%,rgba(255,43,214,.25),transparent 70%),
+    rgba(7,6,13,.96)}
+#reveal.on{opacity:1}
+#reveal .text{flex:1 1 40%;max-width:460px;display:flex;flex-direction:column;gap:14px;min-width:0}
+#reveal .k{letter-spacing:.3em;text-transform:uppercase;font-size:14px;color:var(--cyan);font-weight:600}
+#reveal h2{margin:0;font-family:var(--f-crew);font-weight:400;font-size:clamp(64px,10vw,124px);line-height:.85;transform:skewX(-8deg);transform-origin:left}
+#reveal .kana{color:var(--magenta);text-shadow:0 0 10px rgba(255,43,214,.6)}
+#reveal p{margin:0;font-size:18px;line-height:1.45;opacity:.9}
+#reveal .specs{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:16px;margin-top:4px;padding-top:12px;border-top:1px solid rgba(43,240,168,.3)}
+#reveal .specs dt{text-transform:uppercase;letter-spacing:.16em;color:var(--lav);opacity:.8;font-size:12px;align-self:center}
+#reveal .specs dd{margin:0}
+#back{align-self:flex-start;background:none;border:1px solid var(--cyan);color:var(--cyan);padding:10px 18px;font-size:15px;letter-spacing:.14em;text-transform:uppercase;margin-top:8px;box-shadow:0 0 12px rgba(43,240,168,.3)}
+#jersey-wrap{flex:1 1 55%;height:min(86vh,760px);position:relative;min-width:0;touch-action:none;cursor:grab}
+#jersey-wrap::after{content:"";position:absolute;inset:8% 12%;border-radius:50%;background:radial-gradient(ellipse,rgba(117,79,200,.45),transparent 65%);filter:blur(20px);z-index:0;pointer-events:none}
+#jersey-wrap::before{content:"";position:absolute;left:18%;right:18%;bottom:3%;height:5%;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(43,240,168,.55),transparent 70%);filter:blur(6px)}
+#jersey-wrap canvas{position:relative;z-index:1;width:100%!important;height:100%!important;display:block}
+#jersey-wrap .tip{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:13px;letter-spacing:.16em;text-transform:uppercase;opacity:.6}
+@media (max-width:760px){
+  #reveal{flex-direction:column;justify-content:flex-start;overflow:auto;gap:8px;padding-top:calc(20px + env(safe-area-inset-top,0px))}
+  #jersey-wrap{flex:none;width:100%;height:58vh;order:-1}
+  #reveal .text{flex:none;max-width:none;padding-bottom:28px}
+}
+
+#reveal .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+#want{background:var(--magenta);color:#0b0614;border:0;padding:14px 24px;font-size:17px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;filter:drop-shadow(0 0 14px rgba(255,43,214,.6))}
+.ghost{display:inline-flex;align-items:center;padding:13px 20px;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--text);text-decoration:none;background:rgba(196,168,255,.1);box-shadow:inset 0 0 0 1px rgba(196,168,255,.5);font-family:var(--f-ui);cursor:pointer}
+.ghost:hover{background:rgba(196,168,255,.2)}
+#order{z-index:65;background:rgba(5,3,10,.82);backdrop-filter:blur(4px)}
+#order form{display:flex;flex-direction:column;gap:6px;position:relative}
+#order label{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--lav);margin-top:8px}
+#order input{font:inherit;font-size:17px;color:var(--text);background:rgba(7,6,13,.7);border:1px solid rgba(196,168,255,.35);padding:11px 12px;border-radius:0;outline:none}
+#order input:focus{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan),0 0 14px rgba(43,240,168,.35)}
+#order-send{margin-top:16px;align-self:flex-start;background:var(--cyan);color:#06120d;border:0;padding:13px 24px;font-size:16px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+#order-send:disabled{opacity:.6;cursor:wait}
+#order .lead{font-size:16px;opacity:.85}
+#order .err{color:#ff8ad8;font-size:15px;margin:8px 0 0}
+#order .ok{font-size:19px;color:var(--cyan)}
+#order .small{font-size:14px;opacity:.75}
+#order .msg{font-size:16px;background:rgba(7,6,13,.7);border:1px solid rgba(43,240,168,.45);padding:12px;user-select:all;-webkit-user-select:all;word-break:break-word}
+#order-copy{background:var(--cyan);color:#06120d;border:0;padding:12px 22px;font-size:15px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+#order-done,#order-off{position:relative}
+.hud-btn{position:fixed;z-index:12;top:calc(12px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;gap:8px;align-items:center;background:rgba(7,6,13,.78);color:var(--text);border:1px solid rgba(255,43,214,.55);padding:7px 14px;font-size:14px;letter-spacing:.14em;text-transform:uppercase;box-shadow:0 0 14px rgba(255,43,214,.25)}
+.hud-btn i{font-style:normal;font-family:var(--f-jp);color:var(--magenta);letter-spacing:0}
+.hud-btn:hover{background:rgba(255,43,214,.15)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01s!important}}
+</style>
+
+<!-- ================= COMPTE À REBOURS ================= -->
+<section id="gate" class="screen" aria-live="polite">
+  <div class="vert l neon-m">黒い虹自転車海賊団</div>
+  <div class="vert r neon-c">二〇二七年 出航</div>
+  <div class="kicker">Avis à l'équipage · <span class="jp">出航まで</span></div>
+  <div class="crew-mark">
+    <div class="big glitch" data-text="BLACK RAINBOW">BLACK RAINBOW</div>
+    <div class="sub">CYCLING CREW · MAILLOT 2027</div>
+    <div class="kana neon-c">ブラック・レインボー</div>
+  </div>
+  <div id="clock">
+    <div class="unit"><b id="cd-h">--</b><span><i>時</i>heures</span></div>
+    <div class="unit"><b id="cd-m">--</b><span><i>分</i>minutes</span></div>
+    <div class="unit"><b id="cd-s">--</b><span><i>秒</i>secondes</span></div>
+  </div>
+  <div class="when">Ouverture des cales dimanche 25 octobre, 19h</div>
+  <button id="enter" class="cut" disabled><i>乗船</i><span id="enter-label">Monter à bord</span></button>
+</section>
+
+<!-- ================= INTRO ================= -->
+<section id="intro" class="screen" hidden>
+  <canvas id="introCanvas"></canvas>
+  <div class="fade" id="introFade"></div>
+</section>
+
+<!-- ================= SOUTE ================= -->
+<section id="cabin" class="screen" hidden>
+  <div id="viewport">
+    <div id="stage">
+      <video class="bgvid" src="soute.mp4" poster="soute.webp" muted loop playsinline preload="auto" aria-hidden="true"></video>
+      <button class="egg hot" data-egg="ancien" style="left:4.167%;top:46.000%;width:16.927%;height:38.500%;--d:0.2s" aria-label="L'ancien maillot"><span class="tag">旧</span></button>
+      <button class="egg hot" data-egg="nyc" style="left:0.000%;top:12.600%;width:3.438%;height:30.600%;--d:1.1s" aria-label="L'affiche NYC Marathon"><span class="tag">走</span></button>
+      <button class="egg hot" data-egg="australie" style="left:17.812%;top:29.200%;width:7.292%;height:10.000%;--d:2.9s" aria-label="La carte postale d'Australie"><span class="tag">豪州</span></button>
+      <button class="egg hot" data-egg="roubaix" style="left:25.156%;top:28.100%;width:8.438%;height:22.600%;--d:1.4s" aria-label="L'affiche Paris-Roubaix"><span class="tag">北の地獄</span></button>
+      <button class="egg hot" data-egg="dossard" style="left:34.896%;top:41.600%;width:7.292%;height:10.400%;--d:2.6s" aria-label="Le dossard GFMV"><span class="tag">番号</span></button>
+      <button class="egg hot" data-egg="campingcar" style="left:60.312%;top:34.000%;width:7.812%;height:7.600%;--d:3.4s" aria-label="Le camping-car jouet sur l'étagère"><span class="tag">旅</span></button>
+      <button class="egg hot" data-egg="musette" style="left:72.188%;top:22.600%;width:5.729%;height:20.400%;--d:0.9s" aria-label="La musette jaune de Michel"><span class="tag">袋</span></button>
+      <button class="egg hot" data-egg="hyrox" style="left:95.625%;top:9.400%;width:4.375%;height:31.600%;--d:3.8s" aria-label="L'affiche HYROX Amsterdam"><span class="tag">鍛</span></button>
+      <button class="egg hot" data-egg="casque" style="left:28.542%;top:66.800%;width:8.854%;height:8.800%;--d:2.1s" aria-label="Les chaussures de trail Hoka"><span class="tag">靴</span></button>
+      <button class="egg hot" data-egg="velo" style="left:57.917%;top:52.800%;width:28.542%;height:43.000%;--d:1.8s" aria-label="Le vélo Canyon Aeroad"><span class="tag">自転車</span></button>
+      <button class="egg hot" id="chest" data-reveal style="left:41.562%;top:68.400%;width:15.417%;height:21.600%;--d:0s" aria-label="Ouvrir le coffre et révéler le maillot 2027"><span class="tag" style="opacity:.95;color:var(--gold);text-shadow:0 0 .4em var(--gold)">宝箱</span></button>
+    </div>
+  </div>
+  <div id="counter" class="hud"><i>思い出</i> Souvenirs <b><span id="found">0</span>/<span id="total">7</span></b></div>
+  <button id="replay" class="hud-btn" hidden><i>再生</i>Revoir l'intro</button>
+  <div id="hint" class="hud"><i>探せ</i><span id="hint-label">Glisse pour explorer la soute</span></div>
+</section>
+
+<!-- ================= SOUVENIR ================= -->
+<section id="memory" class="screen" hidden role="dialog" aria-modal="true" aria-labelledby="mem-title">
+  <div class="card" id="mem-card">
+    <button class="close" id="mem-close" aria-label="Fermer">×</button>
+    <div class="k" id="mem-k"></div>
+    <h2 id="mem-title"></h2>
+    <div id="mem-body"></div>
+  </div>
+</section>
+
+<!-- ================= J'EN VEUX UN ================= -->
+<section id="order" class="screen" hidden role="dialog" aria-modal="true" aria-labelledby="order-title">
+  <div class="card">
+    <button class="close" id="order-close" aria-label="Fermer">×</button>
+    <div class="k">Maillot 2027 · <span class="jp">注文</span></div>
+    <h2 id="order-title">J'en veux un</h2>
+    <form id="order-form" novalidate>
+      <p class="lead">Laisse tes coordonnées, Romain revient vers toi pour les tailles et la commande.</p>
+      <label for="f-prenom">Prénom</label>
+      <input id="f-prenom" name="prenom" autocomplete="given-name" required>
+      <label for="f-nom">Nom</label>
+      <input id="f-nom" name="nom" autocomplete="family-name" required>
+      <label for="f-mail">E-mail</label>
+      <input id="f-mail" name="mail" type="email" autocomplete="email" required>
+      <p class="err" id="order-err" role="alert" hidden></p>
+      <button id="order-send" type="submit" class="cut">Je le veux</button>
+    </form>
+    <div id="order-done" hidden>
+      <p class="ok">C'est noté. Ton nom est sur la liste de l'équipage.</p>
+      <p class="small">Romain revient vers toi pour la taille et le paiement.</p>
+    </div>
+    <div id="order-off" hidden>
+      <p>Dernière étape : copie ce message et colle-le dans le groupe de l'équipage, Romain t'ajoute à la liste.</p>
+      <p class="msg" id="order-msg"></p>
+      <button id="order-copy" type="button" class="cut">Copier le message</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RÉVÉLATION ================= -->
+<div id="flash"></div>
+<section id="reveal" class="screen" hidden>
+  <div class="text">
+    <div class="k">Le trésor de l'équipage · <span class="jp">公開</span></div>
+    <h2><span class="glitch" data-text="MAILLOT">MAILLOT</span><br><span class="glitch" data-text="2027">2027</span></h2>
+    <div class="kana">ブラック・レインボー 二〇二七</div>
+    <p>Le voilà. Fais-le tourner pour en voir chaque détail.</p>
+    <dl class="specs">
+      <dt>Modèle</dt><dd>Maillot manches courtes Attitude</dd>
+      <dt>Couleurs</dt><dd>Lavande, violet, lilas, vert menthe sur noir</dd>
+      <dt>Fabricant</dt><dd>Gobik Custom Works</dd>
+    </dl>
+    <div class="actions">
+      <button id="want" class="cut">J'en veux un</button>
+      <a id="pdf" class="ghost cut" href="plaquette-maillot-2027-black-rainbow.pdf" download target="_blank" rel="noopener">Télécharger la plaquette PDF</a>
+    </div>
+    <button id="back" class="cut">Retour dans la soute</button>
+  </div>
+  <div id="jersey-wrap"><div class="tip">Glisse pour faire tourner</div></div>
+</section>
+
+<script>
+(() => {
+/* ======== RÉGLAGES ======== */
+// Dimanche 25/10/2026 19h heure de Paris (passage à l'heure d'hiver la nuit même : UTC+1)
+const REVEAL_AT = Date.UTC(2026, 9, 25, 18, 0, 0);
+const INTRO_VIDEO = "";          // chemin de la vraie vidéo (ex. "intro.mp4")
+const INTRO_MS = 9000;
+const PREVIEW = location.hash === "#apercu";
+
+const EGGS = {
+  ancien:{kj:"旧",k:"Souvenir n°1",t:"L'ancien maillot",b:`<p>Le premier maillot de l'équipage, toujours suspendu dans la penderie.</p><div class="todo">À compléter : le souvenir qu'il raconte (première sortie, photo de groupe, anecdote).</div>`},
+  dossard:{kj:"番号",k:"Souvenir n°2",t:"GFMV",b:`<p>Dossard n°861, Gran Fondo Mont Ventoux. Le jour où tout l'équipage a grimpé le Géant de Provence.</p><div class="todo">À compléter : le souvenir associé.</div>`},
+  musette:{kj:"袋",k:"Souvenir n°3",t:"Michel",b:`<p>La musette jaune de Michel.</p><div class="todo">À compléter : l'histoire derrière le prénom.</div>`},
+  velo:{kj:"自転車",k:"Le saviez-vous ?",t:"Un Canyon via sa boîte",b:`<p>Il existe un moyen de rouler sur un Canyon Aeroad comme celui-ci en le faisant financer par son entreprise.</p><div class="todo">À compléter : le process que tu veux décrire, étape par étape.</div>`},
+  casque:{kj:"靴",k:"Souvenir n°5",t:"Les Hoka",b:`<div class="todo">À compléter : souvenir associé aux chaussures de trail.</div>`},
+  roubaix:{kj:"地獄",k:"Souvenir n°6",t:"L'Enfer du Nord",b:`<div class="todo">À compléter : souvenir associé à Paris-Roubaix.</div>`},
+  nyc:{kj:"走",k:"Souvenir",t:"NYC Marathon",b:`<div class="todo">À compléter : souvenir associé au marathon de New York.</div>`},
+  hyrox:{kj:"鍛",k:"Prochain défi",t:"HYROX Amsterdam",b:`<div class="todo">À compléter : le défi HYROX Amsterdam.</div>`},
+  australie:{kj:"豪州",k:"Souvenir",t:"G'day from Australia",b:`<div class="todo">À compléter : souvenir associé à l'Australie.</div>`},
+  campingcar:{kj:"旅",k:"Été 2027",t:"Le Tour en camping-car",b:`<p>Cet été, l'équipage prend la route pour suivre plusieurs étapes du Tour de France 2027, du 2 au 25 juillet.</p><ul><li>Grand Départ à Édimbourg le vendredi 2 juillet</li><li>Trois étapes britanniques : Édimbourg – Carlisle, Keswick – Liverpool, Welshpool – Cardiff</li><li>Arrivée à Paris le dimanche 25 juillet</li></ul><div class="todo">À compléter : carte du parcours complet et étapes choisies par le groupe.</div>`}
+};
+
+const $ = id => document.getElementById(id);
+const show = (el, on=true) => { el.hidden = !on; };
+$("total").textContent = Object.keys(EGGS).length;
+
+/* ======== COMPTE À REBOURS ======== */
+const pad = n => String(n).padStart(2,"0");
+function tick(){
+  const left = Math.max(0, REVEAL_AT - Date.now());
+  $("cd-h").textContent = pad(Math.floor(left/3.6e6));
+  $("cd-m").textContent = pad(Math.floor(left/6e4)%60);
+  $("cd-s").textContent = pad(Math.floor(left/1e3)%60);
+  const open = left === 0 || PREVIEW;
+  $("enter").disabled = !open;
+  $("enter-label").textContent = open ? "Monter à bord" : "Cales verrouillées";
+}
+tick(); const clockTimer = setInterval(tick, 1000);
+const DIRECT = location.hash === "#soute" || location.hash === "#maillot";
+if (PREVIEW || DIRECT){ const f=document.createElement("div"); f.id="preview-flag"; f.textContent="Aperçu"; document.body.appendChild(f); }
+
+$("enter").addEventListener("click", () => {
+  if ($("enter").disabled) return;
+  clearInterval(clockTimer);
+  show($("gate"), false); show($("intro"));
+  playIntro();
+});
+
+/* ======== INTRO (provisoire, palette néon) ======== */
+let introRuns = 0;
+function playIntro(){
+  introRuns++;
+  const old = $("intro").querySelector("video"); if (old) old.remove();
+  $("introFade").style.opacity = 0;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (INTRO_VIDEO){
+    const v = document.createElement("video");
+    Object.assign(v,{src:INTRO_VIDEO,playsInline:true,autoplay:true});
+    v.setAttribute("playsinline","");
+    $("intro").prepend(v);
+    v.addEventListener("ended", endIntro);
+    v.play().catch(() => { v.muted = true; v.play(); });
+    return;
+  }
+  const c = $("introCanvas"), x = c.getContext("2d");
+  const dpr = Math.min(2, devicePixelRatio||1);
+  const size = () => { c.width = innerWidth*dpr; c.height = innerHeight*dpr; };
+  size(); addEventListener("resize", size);
+  const dur = reduce ? 1500 : INTRO_MS, t0 = performance.now();
+  const ridgePath = (W,H,base,amp,seed,shift) => {
+    x.beginPath(); x.moveTo(0,H);
+    for (let i=0;i<=60;i++){
+      const px=i/60*W, u=i/60*6+shift;
+      x.lineTo(px, base - amp*(0.55*Math.sin(u+seed)+0.3*Math.sin(u*2.3+seed*2)+0.15*Math.sin(u*5.1)));
+    }
+    x.lineTo(W,H); x.closePath();
+  };
+  const glow = (col,b) => { x.shadowColor=col; x.shadowBlur=b*dpr; };
+  function synthSun(cx,cy,r){
+    const g=x.createLinearGradient(0,cy-r,0,cy+r); g.addColorStop(0,"#ffcf4a"); g.addColorStop(.6,"#ff2bd6"); g.addColorStop(1,"#7b2cff");
+    x.save(); x.beginPath(); x.arc(cx,cy,r,0,7); x.clip(); x.fillStyle=g; x.fillRect(cx-r,cy-r,r*2,r*2);
+    x.fillStyle="#1a0833"; for(let i=0;i<6;i++){ const y=cy+r*(.15+i*.15); x.fillRect(cx-r,y,r*2,r*.03*(i+1)); }
+    x.restore();
+  }
+  function grid(W,H,top,q,col){
+    x.save(); x.strokeStyle=col; x.lineWidth=1.2*dpr; glow(col,8);
+    for(let i=-12;i<=12;i++){ x.beginPath(); x.moveTo(W/2+i*W*.02,top); x.lineTo(W/2+i*W*.18,H); x.stroke(); }
+    for(let j=0;j<12;j++){ const k=((j+q*6)%12)/12, y=top+(H-top)*k*k; x.beginPath(); x.moveTo(0,y); x.lineTo(W,y); x.stroke(); }
+    x.restore();
+  }
+  function frame(now){
+    const p=Math.min(1,(now-t0)/dur), W=c.width, H=c.height;
+    x.shadowBlur=0;
+    if (p < 0.4){ // survol de montagnes au crépuscule
+      const q=p/0.4;
+      const g=x.createLinearGradient(0,0,0,H); g.addColorStop(0,"#0b0420"); g.addColorStop(.55,"#4a1380"); g.addColorStop(.75,"#ff2bd6"); g.addColorStop(1,"#140826");
+      x.fillStyle=g; x.fillRect(0,0,W,H);
+      synthSun(W*.5,H*(.5+.15*q),H*.17);
+      x.fillStyle="#1a0a33"; ridgePath(W,H,H*(.58+.22*q),H*.12,1,q*1.5); x.fill();
+      x.fillStyle="#0e0620"; ridgePath(W,H,H*(.66+.3*q),H*.18,2.4,q*2.5); x.fill();
+      x.save(); x.strokeStyle="#2bf0a8"; x.lineWidth=2*dpr; glow("#2bf0a8",14); ridgePath(W,H,H*(.66+.3*q),H*.18,2.4,q*2.5); x.stroke(); x.restore();
+      x.fillStyle="#07040f"; ridgePath(W,H,H*(.82+.45*q),H*.14,4,q*4); x.fill();
+      grid(W,H,H*(.86+.3*q),q*3,"rgba(255,43,214,.55)");
+    } else if (p < 0.75){ // la mer, la ville, le galion
+      const q=(p-.4)/.35, hz=H*.52;
+      const g=x.createLinearGradient(0,0,0,hz); g.addColorStop(0,"#07031a"); g.addColorStop(1,"#5a1a8a");
+      x.fillStyle=g; x.fillRect(0,0,W,hz);
+      x.fillStyle="#120626"; for(let i=0;i<34;i++){ const bw=W*.028, bh=H*(.06+.18*Math.abs(Math.sin(i*7.3))); x.fillRect(i*W/34,hz-bh,bw,bh); }
+      x.fillStyle="#2bf0a8"; for(let i=0;i<80;i++){ x.fillRect((i*137)%W, hz-H*.02-((i*53)%(H*.14)), 2*dpr,2*dpr); }
+      x.fillStyle="#05020d"; x.fillRect(0,hz,W,H-hz);
+      x.save(); glow("#ff2bd6",10); x.fillStyle="rgba(255,43,214,.5)";
+      for(let i=0;i<14;i++){ const y=hz+(H-hz)*(i/14)**1.4; x.fillRect(W*.3+Math.sin(i+q*8)*W*.05,y,W*.4*(1-i/20),1.5*dpr); }
+      x.restore();
+      const s=H*(.05+.55*q*q), cx=W/2, cy=hz;
+      x.save(); x.fillStyle="#020107"; x.strokeStyle="#ff2bd6"; x.lineWidth=2*dpr; glow("#ff2bd6",16);
+      x.beginPath(); x.moveTo(cx-s*1.3,cy); x.lineTo(cx+s*1.3,cy); x.lineTo(cx+s*.9,cy+s*.45); x.lineTo(cx-s*.9,cy+s*.45); x.closePath(); x.fill(); x.stroke();
+      x.fillRect(cx-s*.05,cy-s*1.4,s*.1,s*1.4);
+      x.beginPath(); x.moveTo(cx,cy-s*1.3); x.quadraticCurveTo(cx+s*.9,cy-s*.8,cx,cy-s*.2); x.closePath(); x.fill(); x.stroke();
+      x.beginPath(); x.moveTo(cx-s*.1,cy-s*1.1); x.quadraticCurveTo(cx-s*.8,cy-s*.7,cx-s*.1,cy-s*.3); x.closePath(); x.fill(); x.stroke();
+      x.fillStyle="#2bf0a8"; glow("#2bf0a8",24); x.beginPath(); x.arc(cx+s*.35,cy+s*.2,s*.07,0,7); x.fill();
+      x.restore();
+    } else { // plongée dans le hublot
+      const q=(p-.75)/.25;
+      x.fillStyle="#020107"; x.fillRect(0,0,W,H);
+      const r=Math.max(W,H)*(.05+1.1*q*q);
+      const g=x.createRadialGradient(W/2,H/2,0,W/2,H/2,r);
+      g.addColorStop(0,"#eafff5"); g.addColorStop(.35,"#2bf0a8"); g.addColorStop(.7,"#7b2cff"); g.addColorStop(1,"#07060d");
+      x.fillStyle=g; x.beginPath(); x.arc(W/2,H/2,r,0,7); x.fill();
+      x.save(); x.strokeStyle="#ff2bd6"; x.lineWidth=r*.06; glow("#ff2bd6",30); x.stroke(); x.restore();
+    }
+    if (p < 1) requestAnimationFrame(frame); else endIntro();
+  }
+  requestAnimationFrame(frame);
+}
+if (DIRECT){ // accès direct pour travailler sur la soute ou le maillot
+  clearInterval(clockTimer);
+  show($("gate"), false);
+  setTimeout(() => {
+    openCabin();
+    if (location.hash === "#maillot") $("chest").click();
+    if (seenIntro() || PREVIEW) show($("replay"));
+  }, 0);
+}
+let introEnded = false;
+function endIntro(){
+  if (introEnded) return; introEnded = true;
+  $("introFade").style.opacity = 1;
+  try { localStorage.setItem("br27-intro-vue", "1"); } catch(e) {}
+  setTimeout(() => { show($("intro"), false); openCabin(); show($("replay")); }, 900);
+}
+function seenIntro(){ try { return localStorage.getItem("br27-intro-vue") === "1"; } catch(e) { return false; } }
+$("replay").addEventListener("click", () => {
+  introEnded = false;
+  const bv=document.querySelector(".bgvid"); if (bv) bv.pause();
+  show($("cabin"), false); show($("replay"), false); show($("intro"));
+  playIntro();
+});
+
+/* ======== SOUTE ======== */
+function layoutStage(){
+  const w = Math.max(innerWidth, innerHeight*1.92), h = w/1.92;
+  Object.assign($("stage").style,{width:w+"px",height:h+"px",fontSize:(w/100)+"px"});
+}
+function openCabin(){
+  preloadJersey();
+  const bv=document.querySelector(".bgvid"); if (bv) bv.play().catch(()=>{});
+  show($("cabin")); layoutStage();
+  const vp = $("viewport");
+  vp.scrollLeft = (vp.scrollWidth - vp.clientWidth)/2 - vp.clientWidth*0.05;
+  vp.scrollTop = (vp.scrollHeight - vp.clientHeight)/2;
+  $("hint-label").textContent = vp.scrollWidth > vp.clientWidth + 20 ? "Glisse pour explorer la soute" : "Fouille la soute";
+  setTimeout(() => $("hint").style.opacity = 0, 5000);
+}
+addEventListener("resize", () => { if (!$("cabin").hidden) layoutStage(); });
+
+(() => { // glisser à la souris sur desktop
+  const vp=$("viewport"); let down=false,sx=0,sl=0,moved=false;
+  vp.addEventListener("pointerdown",e=>{ if(e.pointerType!=="mouse") return; down=true; moved=false; sx=e.clientX; sl=vp.scrollLeft; });
+  addEventListener("pointermove",e=>{ if(!down) return; const d=e.clientX-sx; if(Math.abs(d)>4) moved=true; vp.scrollLeft=sl-d; });
+  addEventListener("pointerup",()=>{ down=false; });
+  vp.addEventListener("click",e=>{ if(moved){ e.stopPropagation(); e.preventDefault(); moved=false; } },true);
+})();
+
+const found = new Set();
+document.querySelectorAll(".egg[data-egg]").forEach(b => b.addEventListener("click", () => {
+  const id=b.dataset.egg, e=EGGS[id];
+  found.add(id); b.classList.add("found"); $("found").textContent=found.size;
+  $("mem-card").dataset.kanji=e.kj;
+  $("mem-k").textContent=e.k; $("mem-title").textContent=e.t; $("mem-body").innerHTML=e.b;
+  show($("memory")); $("mem-close").focus();
+}));
+const closeMem = () => show($("memory"), false);
+$("mem-close").addEventListener("click", closeMem);
+$("memory").addEventListener("click", e => { if (e.target.id==="memory") closeMem(); });
+addEventListener("keydown", e => { if (e.key==="Escape") closeMem(); });
+
+/* ======== RÉVÉLATION ======== */
+let jersey=null;
+$("chest").addEventListener("click", () => {
+  $("chest").classList.add("open");
+  $("flash").animate([{opacity:0},{opacity:1,offset:.45},{opacity:1,offset:.6},{opacity:0}],{duration:2200,easing:"ease-in-out"});
+  setTimeout(() => {
+    show($("reveal"));
+    if (!jersey) jersey = buildJersey($("jersey-wrap"));
+    requestAnimationFrame(() => $("reveal").classList.add("on"));
+  }, 1100);
+});
+$("back").addEventListener("click", () => {
+  $("reveal").classList.remove("on");
+  setTimeout(() => { show($("reveal"), false); $("chest").classList.remove("open"); }, 600);
+});
+
+/* Vue 360 : 56 vues réelles extraites du rendu Gobik */
+const JN=56, JF=Array.from({length:JN},(_,i)=>"jersey/j"+String(i).padStart(2,"0")+".webp");
+const jImgs=[]; let jLoaded=0, preloadStarted=false;
+function preloadJersey(){
+  if (preloadStarted) return; preloadStarted=true;
+  JF.forEach((src,i)=>{ const im=new Image(); im.decoding="async"; im.onload=()=>{ jLoaded++; }; im.src=src; jImgs[i]=im; });
+}
+function buildJersey(wrap){
+  preloadJersey();
+  const c=document.createElement("canvas"), x=c.getContext("2d"); wrap.prepend(c);
+  const dpr=Math.min(2,devicePixelRatio||1);
+  let W=0,H=0;
+  function resize(){ W=wrap.clientWidth; H=wrap.clientHeight; c.width=W*dpr; c.height=H*dpr; c.style.width=W+"px"; c.style.height=H+"px"; }
+  resize(); addEventListener("resize",resize);
+  let ang=0, vel=0, drag=false, lx=0, idle=0, last=-1;
+  const AUTO=1/9000; // un tour en 9 s
+  c.addEventListener("pointerdown",e=>{drag=true;lx=e.clientX;c.setPointerCapture(e.pointerId);wrap.style.cursor="grabbing";});
+  c.addEventListener("pointermove",e=>{ if(!drag) return; const dx=e.clientX-lx; lx=e.clientX; vel=-dx/(W*1.4); ang+=vel; idle=performance.now(); });
+  c.addEventListener("pointerup",()=>{drag=false;wrap.style.cursor="grab";});
+  let t0=performance.now();
+  (function loop(now){
+    const dt=now-t0; t0=now;
+    if(!drag){
+      const target = now-idle>2000 ? AUTO*dt : 0;
+      vel += (target-vel)*0.06; ang += vel;
+    }
+    const i=((Math.floor(((ang%1)+1)%1*JN))%JN), im=jImgs[i];
+    if (im && im.complete && im.naturalWidth && (i!==last || c.dataset.w!=String(W))){
+      x.clearRect(0,0,c.width,c.height);
+      const s=Math.min(c.width/im.naturalWidth, c.height/im.naturalHeight)*0.98;
+      const w=im.naturalWidth*s, h=im.naturalHeight*s;
+      x.drawImage(im,(c.width-w)/2,(c.height-h)/2,w,h);
+      last=i; c.dataset.w=String(W);
+    }
+    requestAnimationFrame(loop);
+  })(t0);
+  return c;
+}
+
+/* ======== PLAQUETTE PDF ======== */
+const cuseDl = () => (window.claude && typeof window.claude.use === "function") ? window.claude.use("downloads").catch(() => null) : Promise.resolve(null);
+const PDF_NAME = "plaquette-maillot-2027-black-rainbow.pdf";
+let DL = null; cuseDl().then(d => { DL = d; });   // résolu en avance : le clic doit décider sans attendre
+$("pdf").addEventListener("click", async e => {
+  if (!DL) return;                       // pas de capacité : le lien ouvre le PDF dans un nouvel onglet
+  e.preventDefault();
+  try {
+    const blob = await (await fetch(PDF_NAME)).blob();
+    await DL.save({ filename: PDF_NAME, data: blob });
+  } catch (err) {}
+});
+
+/* ======== J'EN VEUX UN ======== */
+// Inscriptions consignées dans Supabase (projet black-rainbow, table interets : ajout seul, lecture interdite au public).
+const SUPABASE_URL = "https://ntedzlpvhsnoxnooqrnd.supabase.co";
+const SUPABASE_KEY = "sb_publishable_POh7HjIjG9Kn4MtxsqPRfw_dbJnGHpC";   // clé publique, faite pour le navigateur
+async function saveInterest(row){
+  const r = await fetch(SUPABASE_URL + "/rest/v1/interets", {
+    method: "POST",
+    headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json", "Prefer": "return=minimal" },
+    body: JSON.stringify(row)
+  });
+  if (!r.ok) throw new Error("HTTP " + r.status);
+}
+function openOrder(){
+  show($("order")); show($("order-form")); show($("order-done"), false); show($("order-off"), false);
+  $("order-err").hidden = true; $("f-prenom").focus();
+}
+$("want").addEventListener("click", openOrder);
+const closeOrder = () => show($("order"), false);
+$("order-close").addEventListener("click", closeOrder);
+$("order").addEventListener("click", e => { if (e.target.id === "order") closeOrder(); });
+addEventListener("keydown", e => { if (e.key === "Escape") closeOrder(); });
+function fallback(prenom, nom, mail){
+  const msg = `Black Rainbow 2027 : je veux un maillot ! ${prenom} ${nom} – ${mail}`;
+  $("order-msg").textContent = msg;
+  show($("order-form"), false); show($("order-off"));
+  const done = t => { $("order-copy").textContent = t; };
+  $("order-copy").onclick = () => {
+    const sel = () => { const r = document.createRange(); r.selectNodeContents($("order-msg")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); };
+    try { navigator.clipboard.writeText(msg).then(() => done("Copié"), () => { sel(); done("Sélectionné, copie-le"); }); }
+    catch(e) { sel(); done("Sélectionné, copie-le"); }
+  };
+}
+$("order-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const prenom = $("f-prenom").value.trim(), nom = $("f-nom").value.trim(), mail = $("f-mail").value.trim();
+  const err = $("order-err");
+  if (!prenom || !nom){ err.textContent = "Indique ton prénom et ton nom."; err.hidden = false; return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)){ err.textContent = "Cette adresse e-mail ne semble pas valide."; err.hidden = false; return; }
+  err.hidden = true; $("order-send").disabled = true;
+  try {
+    await saveInterest({ prenom, nom, email: mail, source: "maillot-2027" });
+    show($("order-form"), false); show($("order-done"));
+  } catch(x) {
+    fallback(prenom, nom, mail);   // réseau coupé ou page ouverte hors du site : on passe par le message à copier
+  } finally { $("order-send").disabled = false; }
+});
+})();
+</script>
+</body>
+</html>
