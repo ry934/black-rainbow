@@ -232,6 +232,10 @@ button{font-family:var(--f-ui);cursor:pointer}
   display:flex;gap:8px;align-items:center;background:rgba(7,6,13,.78);color:var(--text);border:1px solid rgba(255,43,214,.55);padding:7px 14px;font-size:14px;letter-spacing:.14em;text-transform:uppercase;box-shadow:0 0 14px rgba(255,43,214,.25)}
 .hud-btn i{font-style:normal;font-family:var(--f-jp);color:var(--magenta);letter-spacing:0}
 .hud-btn:hover{background:rgba(255,43,214,.15)}
+#skip{opacity:0;transition:opacity .6s;z-index:31}
+#skip.on{opacity:1}
+#skip:not(.on){pointer-events:none}
+@media (max-width:560px){#replay .lbl{display:none}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01s!important}}
 </style>
 
@@ -259,6 +263,7 @@ button{font-family:var(--f-ui);cursor:pointer}
 <section id="intro" class="screen" hidden>
   <canvas id="introCanvas"></canvas>
   <div class="fade" id="introFade"></div>
+  <button id="skip" class="hud-btn" hidden><i>飛</i>Passer</button>
 </section>
 
 <!-- ================= SOUTE ================= -->
@@ -280,7 +285,7 @@ button{font-family:var(--f-ui);cursor:pointer}
     </div>
   </div>
   <div id="counter" class="hud"><i>思い出</i> Souvenirs <b><span id="found">0</span>/<span id="total">7</span></b></div>
-  <button id="replay" class="hud-btn" hidden><i>再生</i>Revoir l'intro</button>
+  <button id="replay" class="hud-btn" hidden aria-label="Revoir l'intro"><i>再生</i><span class="lbl">Revoir l'intro</span></button>
   <div id="hint" class="hud"><i>探せ</i><span id="hint-label">Glisse pour explorer la soute</span></div>
 </section>
 
@@ -351,7 +356,7 @@ button{font-family:var(--f-ui);cursor:pointer}
 // Date et heure de la révélation, heure de Paris (hiver = +01:00). Seule ligne à changer pour décaler.
 const REVEAL = "2026-10-25T19:00:00+01:00";
 const REVEAL_AT = Date.parse(REVEAL);
-const INTRO_VIDEO = "";          // chemin de la vraie vidéo (ex. "intro.mp4")
+const INTRO_VIDEO = "intro.mp4"; // vidéo d'intro (drone : espace > Ventoux > Hérault > Sète > bateau > cale)
 const INTRO_MS = 9000;
 const PREVIEW = location.hash === "#apercu";
 
@@ -421,19 +426,27 @@ $("enter").addEventListener("click", () => {
 });
 
 /* ======== INTRO (provisoire, palette néon) ======== */
-let introRuns = 0;
+let introRuns = 0, skipTimer = 0;
 function playIntro(){
   introRuns++;
   const old = $("intro").querySelector("video"); if (old) old.remove();
   $("introFade").style.opacity = 0;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (INTRO_VIDEO){
+    new Image().src = "soute.webp";                 // la dernière image de la vidéo = le fond de la soute
     const v = document.createElement("video");
-    Object.assign(v,{src:INTRO_VIDEO,playsInline:true,autoplay:true});
+    Object.assign(v,{src:INTRO_VIDEO,playsInline:true,autoplay:true,preload:"auto"});
     v.setAttribute("playsinline","");
     $("intro").prepend(v);
-    v.addEventListener("ended", endIntro);
-    v.play().catch(() => { v.muted = true; v.play(); });
+    let prepared = false;
+    v.addEventListener("timeupdate", () => {       // on installe la soute sous la vidéo juste avant la fin
+      if (!prepared && v.duration && v.duration - v.currentTime < 1.2){ prepared = true; openCabin(true); }
+    });
+    v.addEventListener("ended", () => endIntro(true));
+    v.addEventListener("error", () => endIntro());
+    v.play().catch(() => { v.muted = true; v.play().catch(() => endIntro()); });
+    const sk = $("skip"); sk.classList.remove("on"); show(sk);
+    clearTimeout(skipTimer); skipTimer = setTimeout(() => sk.classList.add("on"), 3000);
     return;
   }
   const c = $("introCanvas"), x = c.getContext("2d");
@@ -516,12 +529,22 @@ if (DIRECT){ // accès direct pour travailler sur la soute ou le maillot
   }, 0);
 }
 let introEnded = false;
-function endIntro(){
+function endIntro(seamless){
   if (introEnded) return; introEnded = true;
-  $("introFade").style.opacity = 1;
+  clearTimeout(skipTimer); show($("skip"), false);
   try { localStorage.setItem("br27-intro-vue", "1"); } catch(e) {}
+  const v = $("intro").querySelector("video");
+  if (seamless === true){                          // fin naturelle : bascule sans noir, même image
+    if ($("cabin").hidden) openCabin(true);
+    const bv = document.querySelector(".bgvid"); if (bv) bv.play().catch(()=>{});
+    requestAnimationFrame(() => { show($("intro"), false); if (v) v.pause(); show($("replay")); });
+    return;
+  }
+  if (v) v.pause();
+  $("introFade").style.opacity = 1;
   setTimeout(() => { show($("intro"), false); openCabin(); show($("replay")); }, 900);
 }
+$("skip").addEventListener("click", () => endIntro());
 function seenIntro(){ try { return localStorage.getItem("br27-intro-vue") === "1"; } catch(e) { return false; } }
 $("replay").addEventListener("click", () => {
   introEnded = false;
@@ -535,12 +558,12 @@ function layoutStage(){
   const w = Math.max(innerWidth, innerHeight*1.92), h = w/1.92;
   Object.assign($("stage").style,{width:w+"px",height:h+"px",fontSize:(w/100)+"px"});
 }
-function openCabin(){
+function openCabin(fromVideo){
   preloadJersey();
-  const bv=document.querySelector(".bgvid"); if (bv) bv.play().catch(()=>{});
+  const bv=document.querySelector(".bgvid"); if (bv && !fromVideo) bv.play().catch(()=>{});
   show($("cabin")); layoutStage();
   const vp = $("viewport");
-  vp.scrollLeft = (vp.scrollWidth - vp.clientWidth)/2 - vp.clientWidth*0.05;
+  vp.scrollLeft = (vp.scrollWidth - vp.clientWidth)/2 - (fromVideo ? 0 : vp.clientWidth*0.05);
   vp.scrollTop = (vp.scrollHeight - vp.clientHeight)/2;
   $("hint-label").textContent = vp.scrollWidth > vp.clientWidth + 20 ? "Glisse pour explorer la soute" : "Fouille la soute";
   setTimeout(() => $("hint").style.opacity = 0, 5000);
