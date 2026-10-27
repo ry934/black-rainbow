@@ -172,6 +172,8 @@ button{font-family:var(--f-ui);cursor:pointer}
 .card p{margin:0 0 10px;line-height:1.45;font-size:17px;position:relative}
 .card ul{margin:0 0 10px;padding-left:18px;line-height:1.5;font-size:16px;position:relative}
 .card li::marker{color:var(--cyan)}
+.card .lnk{display:inline-block;margin-top:6px;padding:11px 20px;background:var(--magenta);color:#0b0614;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;font-size:15px;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+.card .lnk:hover{filter:brightness(1.1)}
 .card .todo{position:relative;font-size:14px;background:rgba(43,240,168,.07);border-left:2px solid var(--cyan);padding:7px 10px;margin-top:12px;color:#c2f5df}
 .close{position:absolute;top:8px;right:10px;background:none;border:0;font-size:28px;color:var(--cyan);line-height:1;padding:4px 8px;z-index:1}
 
@@ -351,16 +353,16 @@ const INTRO_MS = 9000;
 const PREVIEW = location.hash === "#apercu";
 
 const EGGS = {
-  ancien:{kj:"旧",k:"Souvenir n°1",t:"L'ancien maillot",b:`<p>Le premier maillot de l'équipage, toujours suspendu dans la penderie.</p><div class="todo">À compléter : le souvenir qu'il raconte (première sortie, photo de groupe, anecdote).</div>`},
-  dossard:{kj:"番号",k:"Souvenir n°2",t:"GFMV",b:`<p>Dossard n°861, Gran Fondo Mont Ventoux. Le jour où tout l'équipage a grimpé le Géant de Provence.</p><div class="todo">À compléter : le souvenir associé.</div>`},
-  musette:{kj:"袋",k:"Souvenir n°3",t:"Michel",b:`<p>La musette jaune de Michel.</p><div class="todo">À compléter : l'histoire derrière le prénom.</div>`},
+  ancien:{kj:"旧",k:"Archives",t:"L'ancien maillot",b:`<p>Le tout premier maillot de l'équipage, pendu là comme une relique sacrée. Tu peux toujours essayer de l'enfiler, mais on préfère te prévenir : il y a de fortes chances qu'il te serre un peu. Beaucoup, en fait.</p><p>Et non, ce n'est pas la faute de l'Hyrox. Ni du lavage à 40°. Tu sais très bien ce que tu as fait.</p>`},
+  dossard:{kj:"番号",k:"Archives",t:"GFMV, dossard 861",b:`<p>Le Gran Fondo Mont Ventoux. Là où tout a commencé pour certains, et où tout s'est arrêté pour d'autres.</p><p>Le Géant de Provence, on l'aime autant qu'il nous déteste, et il nous le rend bien. Depuis, l'équipage s'est divisé en deux écoles : ceux qui ont fait la paix avec l'idée de ne plus le remonter qu'en VAE, et ceux qui y retournent en juin 2027 « juste pour voir ».</p><p>Spoiler : il n'a pas baissé.</p>`},
+  musette:{kj:"袋",k:"Annonce officielle",t:"Michel a une nouvelle",b:`<p>La musette de Michel ne contient pas que des barres de céréales écrasées : elle transporte une grande nouvelle. Black Rainbow devient officiellement une association. Avec des statuts, un bureau, et tout le sérieux dont on est capable (c'est-à-dire assez peu).</p><p>Pour que l'aventure continue de rouler, il faut un peu de carburant. Même un petit geste finira en bidons, en maillots ou en saucisses de camping-car.</p><p><a class="lnk" href="https://www.helloasso.com/associations/black-rainbow" target="_blank" rel="noopener">Tu peux faire un don</a></p>`},
   velo:{kj:"自転車",k:"Le saviez-vous ?",t:"Un Canyon via sa boîte",b:`<p>Il existe un moyen de rouler sur un Canyon Aeroad comme celui-ci en le faisant financer par son entreprise.</p><div class="todo">À compléter : le process que tu veux décrire, étape par étape.</div>`},
-  casque:{kj:"靴",k:"Souvenir n°5",t:"Les Hoka",b:`<div class="todo">À compléter : souvenir associé aux chaussures de trail.</div>`},
-  roubaix:{kj:"地獄",k:"Souvenir n°6",t:"L'Enfer du Nord",b:`<div class="todo">À compléter : souvenir associé à Paris-Roubaix.</div>`},
-  nyc:{kj:"走",k:"Souvenir",t:"NYC Marathon",b:`<div class="todo">À compléter : souvenir associé au marathon de New York.</div>`},
-  hyrox:{kj:"鍛",k:"Prochain défi",t:"HYROX Amsterdam",b:`<div class="todo">À compléter : le défi HYROX Amsterdam.</div>`},
-  australie:{kj:"豪州",k:"Souvenir",t:"G'day from Australia",b:`<div class="todo">À compléter : souvenir associé à l'Australie.</div>`},
-  campingcar:{kj:"旅",k:"Été 2027",t:"Le Tour en camping-car",b:`<p>Cet été, l'équipage prend la route pour suivre plusieurs étapes du Tour de France 2027, du 2 au 25 juillet.</p><ul><li>Grand Départ à Édimbourg le vendredi 2 juillet</li><li>Trois étapes britanniques : Édimbourg – Carlisle, Keswick – Liverpool, Welshpool – Cardiff</li><li>Arrivée à Paris le dimanche 25 juillet</li></ul><div class="todo">À compléter : carte du parcours complet et étapes choisies par le groupe.</div>`}
+  casque:{kj:"靴",k:"Rappel à l'ordre",t:"Les Hoka",b:`<p>Elles sont là pour te rappeler une vérité simple : quoi qu'il arrive, tu reviendras toujours à la course à pied. Parce que c'est le sport de monsieur tout le monde. Et monsieur tout le monde, c'est toi.</p><p>Elles rappellent aussi à certains qu'ils ont bâché le Festival des Templiers 2026. Les chaussures, elles, étaient prêtes.</p>`},
+  roubaix:{kj:"地獄",k:"À venir",t:"L'Enfer du Nord",b:`<div class="todo">À compléter : le texte de l'affiche Paris-Roubaix.</div>`},
+  nyc:{kj:"走",k:"Rendez-vous (un jour)",t:"Marathon de New York",b:`<p>Le grand rêve américain de l'équipage : 42,195 km à travers les cinq quartiers de New York. Objectif fin 2028.</p><p>Sauf si on décide d'aller voir les JO de Los Angeles cet été-là. Dans ce cas, ce sera 2029, parce qu'on ne traverse pas l'Atlantique deux fois dans l'année sans que quelqu'un à la maison pose des questions.</p><p>Dans tous les cas, le vrai calendrier est entre les mains de Walter et de son contact dans l'organisation. Si tu veux un dossard, tu sais à qui offrir des bières.</p>`},
+  hyrox:{kj:"鍛",k:"Prochain rendez-vous",t:"HYROX Amsterdam",b:`<p>Samedi 23 janvier 2027, Amsterdam. Note-le quelque part, tu n'auras pas d'excuse.</p><p>Le principe de l'athlète hybride : être à moitié coureur, à moitié crossfiteur, et donc, selon la loi des moyennes, moyennement les deux. Huit kilomètres de course entrecoupés de traîneau, de burpees et de fentes, pour vérifier que tu peux souffrir sur tous les plans à la fois.</p><p>Officiellement, on y va ensemble, dans l'esprit d'équipe. Officieusement, tout le monde a déjà regardé les chronos des autres, et personne ne finira derrière son binôme sans fournir une explication écrite.</p>`},
+  australie:{kj:"豪州",k:"À venir",t:"G'day from Australia",b:`<div class="todo">À compléter : le texte de la carte postale.</div>`},
+  campingcar:{kj:"旅",k:"Rendez-vous annuel",t:"Le camping-car",b:`<p>C'est officiel : c'est tous les ans, maintenant. À la mi-juillet, tu loues un camping-car pour trois jours avec les copains, direction les routes des plus beaux cols du monde.</p><p>Au programme : manger des saucisses au bord de la route, regarder passer des gens plus rapides que toi, et ne pas te doucher. Les trois sont obligatoires. Le dernier est le plus respecté.</p>`}
 };
 
 const $ = id => document.getElementById(id);
