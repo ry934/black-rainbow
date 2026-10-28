@@ -696,23 +696,34 @@ const Amb = (() => {
     lfo(0.09, 0.022, 0.026, foamG.gain);
     schedule();
   }
-  // craquement du bois : frottement saccadé (stick-slip) passé dans une résonance de planche
+  // craquement du bois : train d'impulsions saccadé (bois qui frotte) qui fait sonner trois résonances de planche
+  function creakBuffer(){
+    const sr = ctx.sampleRate, dur = rnd(.5, 1.4), n = Math.floor(sr * dur), x = new Float32Array(n);
+    const r0 = rnd(9, 22), r1 = rnd(18, 55), up = Math.random() < .6;
+    let ph = 0;
+    for (let i = 0; i < n; i++){
+      const u = i / n, rate = up ? r0 + (r1 - r0) * u : r1 + (r0 - r1) * u;
+      ph += rate * (1 + rnd(-.25, .25)) / sr;
+      if (ph >= 1){ ph -= 1; const env = Math.sin(Math.PI * Math.min(1, u * 1.15)) ** .6; x[i] = env * rnd(.5, 1); }
+    }
+    const out = new Float32Array(n);
+    [[rnd(220, 380), .9], [rnd(560, 880), .7], [rnd(1150, 1700), .35]].forEach(([f, w]) => {
+      const r = Math.exp(-Math.PI * rnd(25, 55) / sr), c = 2 * r * Math.cos(2 * Math.PI * f / sr), r2 = r * r;
+      let y1 = 0, y2 = 0;
+      for (let i = 0; i < n; i++){ const y = x[i] + c * y1 - r2 * y2; y2 = y1; y1 = y; out[i] += y * w; }
+    });
+    let pk = 0; for (let i = 0; i < n; i++) pk = Math.max(pk, Math.abs(out[i]));
+    const fade = Math.floor(sr * .03);
+    for (let i = 0; i < n; i++){ out[i] /= pk || 1; if (i > n - fade) out[i] *= (n - i) / fade; }
+    const buf = ctx.createBuffer(1, n, sr); buf.copyToChannel(out, 0); return buf;
+  }
   function creak(){
-    const t = ctx.currentTime, dur = rnd(.45, 1.5), vol = rnd(.05, .12);
-    const src = ctx.createOscillator(); src.type = "sawtooth";
-    const f0 = rnd(55, 120); src.frequency.setValueAtTime(f0, t);
-    src.frequency.linearRampToValueAtTime(f0 * rnd(.7, 1.4), t + dur);
-    const bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = rnd(380, 900); bp.Q.value = rnd(6, 12);
-    const chop = ctx.createGain(); chop.gain.value = 0;
-    const tremo = ctx.createOscillator(); tremo.type = "square"; tremo.frequency.setValueAtTime(rnd(14, 30), t);
-    tremo.frequency.linearRampToValueAtTime(rnd(8, 40), t + dur);
-    const tg = ctx.createGain(); tg.gain.value = .5; tremo.connect(tg); tg.connect(chop.gain); chop.gain.setValueAtTime(.5, t);
-    const env = ctx.createGain(); env.gain.setValueAtTime(0, t);
-    env.gain.linearRampToValueAtTime(vol, t + dur * .25); env.gain.linearRampToValueAtTime(vol * .7, t + dur * .7);
-    env.gain.linearRampToValueAtTime(0, t + dur);
-    const pan = ctx.createStereoPanner ? ctx.createStereoPanner() : ctx.createGain(); if (pan.pan) pan.pan.value = rnd(-.8, .8);
-    src.connect(bp); bp.connect(chop); chop.connect(env); env.connect(pan); pan.connect(master);
-    src.start(t); tremo.start(t); src.stop(t + dur + .05); tremo.stop(t + dur + .05);
+    const t = ctx.currentTime, s = ctx.createBufferSource(); s.buffer = creakBuffer();
+    const lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 2600;
+    const g = ctx.createGain(); g.gain.value = rnd(.3, .5);
+    const pan = ctx.createStereoPanner ? ctx.createStereoPanner() : ctx.createGain(); if (pan.pan) pan.pan.value = rnd(-.75, .75);
+    s.connect(lp); lp.connect(g); g.connect(pan); pan.connect(master); s.start(t);
+    if (Math.random() < .3) setTimeout(() => { if (ctx.state === "running") creak(); }, rnd(500, 1300));   // parfois un second craquement en réponse
   }
   // gémissement sourd de la coque, rare
   function groan(){
@@ -733,7 +744,7 @@ const Amb = (() => {
   let timers = [];
   function schedule(){
     const loop = (fn, a, b) => { const go = () => { if (ctx && ctx.state === "running") fn(); timers.push(setTimeout(go, rnd(a, b) * 1000)); }; timers.push(setTimeout(go, rnd(a, b) * 500)); };
-    loop(creak, 4, 11); loop(groan, 14, 30); loop(slap, 2.5, 7);
+    loop(creak, 3, 8); loop(groan, 14, 30); loop(slap, 2.5, 7);
   }
   function fadeTo(v, sec){
     if (!ctx) return; const t = ctx.currentTime;
@@ -755,6 +766,7 @@ const Amb = (() => {
       if (on){ this.unlock(); if (wanted) fadeTo(LEVEL, 1.5); } else fadeTo(0, .6);
       syncBtn();
     },
+    test(){ if (ctx) creak(); },
     pause(p){ if (!ctx) return; if (p) ctx.suspend(); else if (wanted && on) ctx.resume(); }
   };
 })();
