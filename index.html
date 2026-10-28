@@ -236,6 +236,9 @@ button{font-family:var(--f-ui);cursor:pointer}
 #skip.on{opacity:1}
 #skip:not(.on){pointer-events:none}
 @media (max-width:560px){#replay .lbl{display:none}}
+#sound{top:auto;bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+#sound[aria-pressed="false"]{opacity:.6;border-color:rgba(196,168,255,.4);box-shadow:none}
+#sound[aria-pressed="false"] i{color:var(--lav);text-decoration:line-through}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01s!important}}
 </style>
 
@@ -285,6 +288,7 @@ button{font-family:var(--f-ui);cursor:pointer}
     </div>
   </div>
   <div id="counter" class="hud"><i>戦利品</i> Butin <b><span id="found">0</span>/<span id="total">10</span></b></div>
+  <button id="sound" class="hud-btn" hidden aria-pressed="true" aria-label="Couper le son d'ambiance"><i>音</i><span class="lbl" id="sound-lbl">Son</span></button>
   <button id="replay" class="hud-btn" hidden aria-label="Revoir l'intro"><i>再生</i><span class="lbl">Revoir l'intro</span></button>
   <div id="hint" class="hud"><i>探せ</i><span id="hint-label">Glisse pour explorer la soute</span></div>
 </section>
@@ -420,6 +424,7 @@ if (PREVIEW || DIRECT){ const f=document.createElement("div"); f.id="preview-fla
 
 $("enter").addEventListener("click", () => {
   if ($("enter").disabled) return;
+  Amb.unlock();
   clearInterval(clockTimer);
   show($("gate"), false); show($("intro"));
   playIntro();
@@ -547,6 +552,7 @@ function endIntro(seamless){
 $("skip").addEventListener("click", () => endIntro());
 function seenIntro(){ try { return localStorage.getItem("br27-intro-vue") === "1"; } catch(e) { return false; } }
 $("replay").addEventListener("click", () => {
+  Amb.leave(.8);
   introEnded = false;
   const bv=document.querySelector(".bgvid"); if (bv) bv.pause();
   show($("cabin"), false); show($("replay"), false); show($("intro"));
@@ -559,6 +565,7 @@ function layoutStage(){
   Object.assign($("stage").style,{width:w+"px",height:h+"px",fontSize:(w/100)+"px"});
 }
 function openCabin(fromVideo){
+  Amb.enter();
   preloadJersey();
   const bv=document.querySelector(".bgvid"); if (bv && !fromVideo) bv.play().catch(()=>{});
   show($("cabin")); layoutStage();
@@ -595,6 +602,7 @@ addEventListener("keydown", e => { if (e.key==="Escape") closeMem(); });
 let jersey=null;
 $("chest").addEventListener("click", () => {
   $("chest").classList.add("open");
+  Amb.duck(true);
   $("flash").animate([{opacity:0},{opacity:1,offset:.45},{opacity:1,offset:.6},{opacity:0}],{duration:2200,easing:"ease-in-out"});
   setTimeout(() => {
     show($("reveal"));
@@ -603,6 +611,7 @@ $("chest").addEventListener("click", () => {
   }, 1100);
 });
 $("back").addEventListener("click", () => {
+  Amb.duck(false);
   $("reveal").classList.remove("on");
   setTimeout(() => { show($("reveal"), false); $("chest").classList.remove("open"); }, 600);
 });
@@ -645,6 +654,114 @@ function buildJersey(wrap){
   })(t0);
   return c;
 }
+
+/* ======== AMBIANCE SONORE : la cale (mer, coque qui craque) — synthétisée en direct, rien à télécharger ======== */
+const Amb = (() => {
+  const LEVEL = 0.55;                    // volume général, volontairement bas (≈ -30 dB)
+  let ctx = null, master = null, on = true, wanted = false;
+  try { on = localStorage.getItem("br27-son") !== "off"; } catch(e) {}
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  function noiseBuffer(sec, brown){
+    const n = Math.floor(ctx.sampleRate * sec), b = ctx.createBuffer(2, n, ctx.sampleRate);
+    for (let ch = 0; ch < 2; ch++){
+      const d = b.getChannelData(ch); let last = 0;
+      for (let i = 0; i < n; i++){
+        const w = Math.random() * 2 - 1;
+        if (brown){ last = (last + 0.02 * w) / 1.02; d[i] = last * 3.5; } else d[i] = w;
+      }
+    }
+    return b;
+  }
+  function loopSrc(buf){ const s = ctx.createBufferSource(); s.buffer = buf; s.loop = true; s.start(); return s; }
+  function lfo(freq, depth, offset, target){
+    const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = freq; g.gain.value = depth;
+    o.connect(g); g.connect(target); o.start(); target.value = offset;
+  }
+  function build(){
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -24; comp.ratio.value = 4;
+    master = ctx.createGain(); master.gain.value = 0;
+    master.connect(comp); comp.connect(ctx.destination);
+    const brown = noiseBuffer(6, true), white = noiseBuffer(4, false);
+    // la houle : bruit grave, filtré, qui monte et redescend lentement
+    const sea = loopSrc(brown), seaLp = ctx.createBiquadFilter(), seaG = ctx.createGain();
+    seaLp.type = "lowpass"; seaLp.frequency.value = 600;
+    sea.connect(seaLp); seaLp.connect(seaG); seaG.connect(master);
+    lfo(0.07, 0.22, 0.42, seaG.gain); lfo(0.11, 0.12, 0, seaG.gain);
+    lfo(0.05, 200, 600, seaLp.frequency);
+    // l'écume contre la coque : souffle aigu, très discret, décalé sur la houle
+    const foam = loopSrc(white), foamBp = ctx.createBiquadFilter(), foamG = ctx.createGain();
+    foamBp.type = "bandpass"; foamBp.frequency.value = 1400; foamBp.Q.value = 0.7;
+    foam.connect(foamBp); foamBp.connect(foamG); foamG.connect(master);
+    lfo(0.09, 0.022, 0.026, foamG.gain);
+    schedule();
+  }
+  // craquement du bois : frottement saccadé (stick-slip) passé dans une résonance de planche
+  function creak(){
+    const t = ctx.currentTime, dur = rnd(.45, 1.5), vol = rnd(.05, .12);
+    const src = ctx.createOscillator(); src.type = "sawtooth";
+    const f0 = rnd(55, 120); src.frequency.setValueAtTime(f0, t);
+    src.frequency.linearRampToValueAtTime(f0 * rnd(.7, 1.4), t + dur);
+    const bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = rnd(380, 900); bp.Q.value = rnd(6, 12);
+    const chop = ctx.createGain(); chop.gain.value = 0;
+    const tremo = ctx.createOscillator(); tremo.type = "square"; tremo.frequency.setValueAtTime(rnd(14, 30), t);
+    tremo.frequency.linearRampToValueAtTime(rnd(8, 40), t + dur);
+    const tg = ctx.createGain(); tg.gain.value = .5; tremo.connect(tg); tg.connect(chop.gain); chop.gain.setValueAtTime(.5, t);
+    const env = ctx.createGain(); env.gain.setValueAtTime(0, t);
+    env.gain.linearRampToValueAtTime(vol, t + dur * .25); env.gain.linearRampToValueAtTime(vol * .7, t + dur * .7);
+    env.gain.linearRampToValueAtTime(0, t + dur);
+    const pan = ctx.createStereoPanner ? ctx.createStereoPanner() : ctx.createGain(); if (pan.pan) pan.pan.value = rnd(-.8, .8);
+    src.connect(bp); bp.connect(chop); chop.connect(env); env.connect(pan); pan.connect(master);
+    src.start(t); tremo.start(t); src.stop(t + dur + .05); tremo.stop(t + dur + .05);
+  }
+  // gémissement sourd de la coque, rare
+  function groan(){
+    const t = ctx.currentTime, dur = rnd(2, 3.5);
+    const o = ctx.createOscillator(); o.type = "triangle"; o.frequency.setValueAtTime(rnd(42, 60), t);
+    o.frequency.linearRampToValueAtTime(rnd(35, 70), t + dur);
+    const lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 180;
+    const g = ctx.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(rnd(.05, .09), t + dur * .4); g.gain.linearRampToValueAtTime(0, t + dur);
+    o.connect(lp); lp.connect(g); g.connect(master); o.start(t); o.stop(t + dur + .1);
+  }
+  // clapotis contre la coque
+  function slap(){
+    const t = ctx.currentTime, s = ctx.createBufferSource(); s.buffer = noiseBuffer(.4, false);
+    const lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = rnd(500, 900);
+    const g = ctx.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(rnd(.04, .08), t + .03); g.gain.exponentialRampToValueAtTime(.001, t + .35);
+    s.connect(lp); lp.connect(g); g.connect(master); s.start(t);
+  }
+  let timers = [];
+  function schedule(){
+    const loop = (fn, a, b) => { const go = () => { if (ctx && ctx.state === "running") fn(); timers.push(setTimeout(go, rnd(a, b) * 1000)); }; timers.push(setTimeout(go, rnd(a, b) * 500)); };
+    loop(creak, 4, 11); loop(groan, 14, 30); loop(slap, 2.5, 7);
+  }
+  function fadeTo(v, sec){
+    if (!ctx) return; const t = ctx.currentTime;
+    master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value, t); master.gain.linearRampToValueAtTime(v, t + sec);
+  }
+  function syncBtn(){
+    const b = $("sound"); b.setAttribute("aria-pressed", String(on));
+    b.setAttribute("aria-label", on ? "Couper le son d'ambiance" : "Activer le son d'ambiance");
+    $("sound-lbl").textContent = on ? "Son" : "Muet";
+  }
+  return {
+    // à appeler depuis un geste du visiteur (clic) : les navigateurs l'exigent
+    unlock(){ try { if (!ctx) build(); if (ctx.state === "suspended") ctx.resume(); } catch(e) {} },
+    enter(){ wanted = true; show($("sound")); syncBtn(); if (ctx && on) { if (ctx.state === "suspended") ctx.resume(); fadeTo(LEVEL, 4); } },
+    leave(sec){ wanted = false; fadeTo(0, sec == null ? 1.2 : sec); },
+    duck(on_){ if (ctx && on && wanted) fadeTo(on_ ? LEVEL * .45 : LEVEL, 1.2); },
+    toggle(){
+      on = !on; try { localStorage.setItem("br27-son", on ? "on" : "off"); } catch(e) {}
+      if (on){ this.unlock(); if (wanted) fadeTo(LEVEL, 1.5); } else fadeTo(0, .6);
+      syncBtn();
+    },
+    pause(p){ if (!ctx) return; if (p) ctx.suspend(); else if (wanted && on) ctx.resume(); }
+  };
+})();
+$("sound").addEventListener("click", () => Amb.toggle());
+document.addEventListener("visibilitychange", () => Amb.pause(document.hidden));
+// accès direct (#soute) : pas encore de geste, le son démarre au premier contact avec la page
+addEventListener("pointerdown", function first(){ if (!$("cabin").hidden){ Amb.unlock(); Amb.enter(); } removeEventListener("pointerdown", first); }, { once: false });
 
 /* ======== PLAQUETTE PDF ======== */
 const cuseDl = () => (window.claude && typeof window.claude.use === "function") ? window.claude.use("downloads").catch(() => null) : Promise.resolve(null);
