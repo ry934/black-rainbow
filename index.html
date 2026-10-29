@@ -379,7 +379,10 @@ const REVEAL = "2026-10-30T12:00:00+01:00";
 const REVEAL_AT = Date.parse(REVEAL);
 const INTRO_VIDEO = "intro.mp4"; // vidéo d'intro (drone : espace > Ventoux > Hérault > Sète > bateau > cale)
 const INTRO_MS = 9000;
-const PREVIEW = location.hash === "#apercu";
+// Accès capitaine : seule l'empreinte SHA-256 de la clé est dans le code, la clé elle-même n'y figure pas.
+// Lien : …/#<clé> (aperçu, compte à rebours ouvert), …/#<clé>-soute, …/#<clé>-maillot
+const CAPTAIN_SHA256 = "56e2af9f99d0f15052a257b3005529fda55df2794e72582c36ade5a05355825d";
+let PREVIEW = false, DIRECT = null;
 
 const EGGS = {
   ancien:{kj:"旧",k:"Archives",t:"L'ancien maillot",b:`<p>Le tout premier maillot de l'équipage, pendu là comme une relique sacrée. Tu peux toujours essayer de l'enfiler, mais on préfère te prévenir : il y a de fortes chances qu'il te serre un peu. Beaucoup, en fait.</p><p>Et non, ce n'est pas la faute de l'Hyrox. Ni du lavage à 40°. Tu sais très bien ce que tu as fait.</p>`},
@@ -436,8 +439,18 @@ function tick(){
   $("when").textContent = `Ouverture des cales ${parts.weekday} ${parts.day} ${parts.month}, ${h}`;
 })();
 tick(); const clockTimer = setInterval(tick, 1000);
-const DIRECT = location.hash === "#soute" || location.hash === "#maillot";
-if (PREVIEW || DIRECT){ const f=document.createElement("div"); f.id="preview-flag"; f.textContent="Aperçu"; document.body.appendChild(f); }
+async function captainAccess(){
+  const h = decodeURIComponent(location.hash.slice(1));
+  if (!h || !(window.crypto && crypto.subtle)) return;
+  const m = h.match(/^(.*?)(?:-(soute|maillot))?$/);
+  const dig = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(m[1]));
+  const hex = [...new Uint8Array(dig)].map(b => b.toString(16).padStart(2, "0")).join("");
+  if (hex !== CAPTAIN_SHA256) return;
+  PREVIEW = true; DIRECT = m[2] || null;
+  const f=document.createElement("div"); f.id="preview-flag"; f.textContent="Capitaine"; document.body.appendChild(f);
+  tick();
+  if (DIRECT) goDirect();
+}
 
 $("enter").addEventListener("click", () => {
   if ($("enter").disabled) return;
@@ -541,15 +554,14 @@ function playIntro(){
   }
   requestAnimationFrame(frame);
 }
-if (DIRECT){ // accès direct pour travailler sur la soute ou le maillot
+function goDirect(){ // accès direct (capitaine) à la soute ou au maillot
   clearInterval(clockTimer);
   show($("gate"), false);
-  setTimeout(() => {
-    openCabin();
-    if (location.hash === "#maillot") $("chest").click();
-    if (seenIntro() || PREVIEW) show($("replay"));
-  }, 0);
+  openCabin();
+  if (DIRECT === "maillot") $("chest").click();
+  show($("replay"));
 }
+setTimeout(() => captainAccess().catch(() => {}), 0);
 let introEnded = false;
 function endIntro(seamless){
   if (introEnded) return; introEnded = true;

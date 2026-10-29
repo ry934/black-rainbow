@@ -7,4 +7,4 @@ Site de l'association (V1) : révélation du maillot 2027.
 - `jersey/` : 56 vues du maillot pour la rotation.
 - Formulaire : les inscriptions arrivent dans Supabase, projet `black-rainbow`, table `interets`.
 
-Pour ajouter la vidéo d'intro : déposer `intro.mp4` à la racine et renseigner `const INTRO_VIDEO = "intro.mp4";` dans `index.html`.
+Accès « capitaine » (contourne le compte à rebours) : la clé n'est pas dans ce dépôt, seule son empreinte SHA-256 y figure.
