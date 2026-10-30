@@ -263,6 +263,22 @@ button{font-family:var(--f-ui);cursor:pointer}
 #welcome .w-k{font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:var(--magenta);font-weight:700}
 #welcome .w-t{font-family:var(--f-crew);font-size:clamp(40px,8vw,68px);line-height:1;margin:6px 0 8px;transform:skewX(-8deg)}
 #welcome .w-s{font-size:18px;letter-spacing:.02em}
+#order .choices{border:0;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+#order .choices legend{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--lav);margin-bottom:6px;padding:0}
+#order .chk{display:flex;align-items:center;gap:12px;margin:0;font-size:16px;letter-spacing:0;text-transform:none;color:var(--text);cursor:pointer;
+  padding:10px 12px;background:rgba(7,6,13,.55);border:1px solid rgba(196,168,255,.25)}
+#order .chk:has(input:checked){border-color:var(--cyan);background:rgba(43,240,168,.08)}
+#order .chk input{appearance:none;-webkit-appearance:none;width:20px;height:20px;flex:none;margin:0;border:2px solid var(--lav);display:grid;place-content:center;cursor:pointer}
+#order .chk input::before{content:"";width:10px;height:10px;background:var(--cyan);transform:scale(0);transition:transform .12s}
+#order .chk input:checked{border-color:var(--cyan)}
+#order .chk input:checked::before{transform:scale(1)}
+#order .chk input:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+#loot{z-index:62;background:rgba(5,3,10,.8);backdrop-filter:blur(4px)}
+#loot .card{box-shadow:inset 0 0 0 1px var(--magenta),0 0 40px rgba(255,43,214,.35);text-align:left}
+#loot .card h2{font-size:42px}
+.loot-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;position:relative}
+#loot-yes{background:var(--magenta);color:#0b0614;border:0;padding:14px 22px;font-size:16px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;filter:drop-shadow(0 0 14px rgba(255,43,214,.6))}
+#loot-later{border:0}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01s!important}}
 </style>
 
@@ -332,26 +348,48 @@ button{font-family:var(--f-ui);cursor:pointer}
   </div>
 </section>
 
-<!-- ================= J'EN VEUX UN ================= -->
+<!-- ================= TOUT LE BUTIN ================= -->
+<section id="loot" class="screen" hidden role="dialog" aria-modal="true" aria-labelledby="loot-title">
+  <div class="card loot">
+    <button class="close" id="loot-close" aria-label="Fermer">×</button>
+    <div class="k">Butin complet · 10/10 · <span class="jp">全部</span></div>
+    <h2 id="loot-title">Tu as percé les secrets du Black Rainbow</h2>
+    <p>Plus rien ne t'échappe dans cette cale : les cols, les saucisses, le Ventoux, Walter et la musette à Michel.</p>
+    <p>Alors, une seule question : veux-tu faire partie de l'aventure ?</p>
+    <div class="loot-actions">
+      <button id="loot-yes" class="cut">Oui, j'embarque</button>
+      <button id="loot-later" class="ghost cut" type="button">Je fouille encore un peu</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REJOINDRE L'AVENTURE ================= -->
 <section id="order" class="screen" hidden role="dialog" aria-modal="true" aria-labelledby="order-title">
   <div class="card">
     <button class="close" id="order-close" aria-label="Fermer">×</button>
-    <div class="k">Maillot 2027 · <span class="jp">注文</span></div>
-    <h2 id="order-title">J'en veux un</h2>
+    <div class="k">Rejoindre l'équipage · <span class="jp">乗組員</span></div>
+    <h2 id="order-title">Embarque avec nous</h2>
     <form id="order-form" novalidate>
-      <p class="lead">Laisse tes coordonnées, Romain revient vers toi pour les tailles et la commande.</p>
+      <p class="lead">Laisse tes coordonnées et coche ce qui te tente. Romain revient vers toi pour la suite.</p>
       <label for="f-prenom">Prénom</label>
       <input id="f-prenom" name="prenom" autocomplete="given-name" required>
       <label for="f-nom">Nom</label>
       <input id="f-nom" name="nom" autocomplete="family-name" required>
       <label for="f-mail">E-mail</label>
       <input id="f-mail" name="mail" type="email" autocomplete="email" required>
+      <fieldset class="choices">
+        <legend>Ce qui te tente</legend>
+        <label class="chk"><input type="checkbox" id="c-membre"><span>Devenir membre de l'association</span></label>
+        <label class="chk"><input type="checkbox" id="c-maillot"><span>Un maillot cycliste</span></label>
+        <label class="chk"><input type="checkbox" id="c-tshirt"><span>Un tee-shirt running</span></label>
+        <label class="chk"><input type="checkbox" id="c-debardeur"><span>Un débardeur running</span></label>
+      </fieldset>
       <p class="err" id="order-err" role="alert" hidden></p>
-      <button id="order-send" type="submit" class="cut">Je le veux</button>
+      <button id="order-send" type="submit" class="cut">J'embarque</button>
     </form>
     <div id="order-done" hidden>
       <p class="ok">C'est noté. Ton nom est sur la liste de l'équipage.</p>
-      <p class="small">Romain revient vers toi pour la taille et le paiement.</p>
+      <p class="small">Romain revient vers toi pour la suite (tailles, cotisation, paiement).</p>
     </div>
     <div id="order-off" hidden>
       <p>Dernière étape : copie ce message et colle-le dans le groupe de l'équipage, Romain t'ajoute à la liste.</p>
@@ -376,7 +414,7 @@ button{font-family:var(--f-ui);cursor:pointer}
       <dt>Déclinaisons</dt><dd>Maillot vélo, tee-shirt et débardeur de running. Tout existe aussi en version femme.</dd>
     </dl>
     <div class="actions">
-      <button id="want" class="cut">J'en veux un</button>
+      <button id="want" class="cut">Rejoindre l'aventure</button>
       <a id="pdf" class="ghost cut" href="plaquette-maillot-2027-black-rainbow.pdf" download target="_blank" rel="noopener">Télécharger la plaquette PDF</a>
     </div>
     <button id="back" class="cut">Retour dans la soute</button>
@@ -644,7 +682,13 @@ document.querySelectorAll(".egg[data-egg]").forEach(b => b.addEventListener("cli
   $("mem-k").textContent=e.k; $("mem-title").textContent=e.t; $("mem-body").innerHTML=e.b;
   show($("memory")); $("mem-close").focus();
 }));
-const closeMem = () => show($("memory"), false);
+let lootShown = false;
+const closeMem = () => {
+  show($("memory"), false);
+  if (!lootShown && found.size === Object.keys(EGGS).length){   // dernier butin refermé : la pop-up apparaît
+    lootShown = true; setTimeout(() => { show($("loot")); $("loot-yes").focus(); }, 450);
+  }
+};
 $("mem-close").addEventListener("click", closeMem);
 $("memory").addEventListener("click", e => { if (e.target.id==="memory") closeMem(); });
 addEventListener("keydown", e => { if (e.key==="Escape") closeMem(); });
@@ -856,12 +900,20 @@ function openOrder(){
   $("order-err").hidden = true; $("f-prenom").focus();
 }
 $("want").addEventListener("click", openOrder);
+const closeLoot = () => show($("loot"), false);
+$("loot-yes").addEventListener("click", () => { closeLoot(); openOrder(); });
+$("loot-later").addEventListener("click", closeLoot);
+$("loot-close").addEventListener("click", closeLoot);
+$("loot").addEventListener("click", e => { if (e.target.id === "loot") closeLoot(); });
+addEventListener("keydown", e => { if (e.key === "Escape") closeLoot(); });
 const closeOrder = () => show($("order"), false);
 $("order-close").addEventListener("click", closeOrder);
 $("order").addEventListener("click", e => { if (e.target.id === "order") closeOrder(); });
 addEventListener("keydown", e => { if (e.key === "Escape") closeOrder(); });
+const CHOICES = [["c-membre","membre","membre de l'asso"],["c-maillot","maillot_cycliste","maillot cycliste"],["c-tshirt","tshirt_running","tee-shirt running"],["c-debardeur","debardeur_running","débardeur running"]];
 function fallback(prenom, nom, mail){
-  const msg = `Black Rainbow 2027 : je veux un maillot ! ${prenom} ${nom} – ${mail}`;
+  const picks = CHOICES.filter(c => $(c[0]).checked).map(c => c[2]);
+  const msg = `Black Rainbow : j'embarque ! ${prenom} ${nom} – ${mail}` + (picks.length ? ` (${picks.join(", ")})` : "");
   $("order-msg").textContent = msg;
   show($("order-form"), false); show($("order-off"));
   const done = t => { $("order-copy").textContent = t; };
@@ -879,7 +931,9 @@ $("order-form").addEventListener("submit", async e => {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)){ err.textContent = "Cette adresse e-mail ne semble pas valide."; err.hidden = false; return; }
   err.hidden = true; $("order-send").disabled = true;
   try {
-    await saveInterest({ prenom, nom, email: mail, source: "maillot-2027" });
+    const row = { prenom, nom, email: mail, source: "aventure-2027" };
+    CHOICES.forEach(c => { row[c[1]] = $(c[0]).checked; });
+    await saveInterest(row);
     show($("order-form"), false); show($("order-done"));
   } catch(x) {
     fallback(prenom, nom, mail);   // réseau coupé ou page ouverte hors du site : on passe par le message à copier
